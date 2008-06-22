@@ -28,6 +28,12 @@ var  JSDebugger = function () {
     startupTips : {INTEL : 'JSDebugger konsole is activated! press &lt;Alt&gt; + &lt;.&gt; for toggle show/hide the konsole.',
                    APPLE : 'JSDebugger konsole is activated! press %lt;Apple logo&gt; + &lt;.&gt; for toggle show/hide the konsole.'},
     STARTUP_TIPS_TIMEOUT : 2000,
+
+    // HTML ENTITIES
+    HTML_ENTITIES : [
+      [/</g, '&lt;'],
+      [/>/g, '&gt;']
+    ],
 		
 		// ====== CSS class define:
 		CSS_CLASS : {
@@ -1127,6 +1133,11 @@ var  JSDebugger = function () {
 				with (this) {
 					var _cmdRetValue = eval(cmdStr);
 					if (_cmdRetValue) {
+            _cmdRetValue = _cmdRetValue.toString();
+            for (var i=0; i<this.HTML_ENTITIES.length; i++) {
+              var entityElement = this.HTML_ENTITIES[i];
+              _cmdRetValue = _cmdRetValue.replace(entityElement[0], entityElement[1]);
+            }
 						this.info('<b>' + cmdStr + ':</b> \n' + _cmdRetValue);
 					} else if (this.logEntriesCount > 0) {
 						this.info('<b>' + cmdStr + '</b>');
